@@ -337,11 +337,11 @@ class Pipeline:
 
 
 # Main function to initialize and run the pipeline
-def main():
-    pipeline = Pipeline()
-    result = pipeline.pipe("Top things to do in NYC", model_id="moa_groq_manifold")
-    print(result)
-
-
-if __name__ == "__main__":
-    main()
+# def main():
+#     pipeline = Pipeline()
+#     result = pipeline.pipe("Top things to do in NYC", model_id="moa_groq_manifold")
+#     print(result)
+# 
+# 
+# if __name__ == "__main__":
+#     main()
