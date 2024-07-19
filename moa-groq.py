@@ -86,7 +86,6 @@ class Pipeline:
             GROQ_API_KEY_2=os.getenv("GROQ_API_KEY_2"),
             GROQ_API_KEY_3=os.getenv("GROQ_API_KEY_3"),
             GROQ_API_KEY_4=os.getenv("GROQ_API_KEY_4"),
-            "pipelines": ["*"],  # Connect to all pipelines
         )
         self.model_aggregate = {
             "name": GROQ_MODEL_AGGREGATE,
