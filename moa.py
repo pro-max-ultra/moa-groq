@@ -12,6 +12,14 @@ import asyncio  # Standard library for asynchronous I/O
 load_dotenv()
 
 
+# Function to check if all required environment variables are loaded correctly
+def check_env_variable(var, var_name):
+    if var is None:
+        logger.error(f"Environment variable {var_name} is not set.")
+        raise ValueError(f"Environment variable {var_name} is not set.")
+    logger.debug(f"{var_name}: {var}")
+    return var
+
 
 # Define default values and model configuration using environment variables
 GROQ_DEFAULT_MAX_TOKENS = int(os.getenv("GROQ_DEFAULT_MAX_TOKENS", "4096"))
