@@ -7,26 +7,6 @@ from loguru import logger  # Third-party logging library
 from pydantic import BaseModel  # Third-party library for data validation using Python type annotations
 from groq import AsyncGroq  # Library for interacting with the Groq API
 
-# Specify the path to the .env-groq file
-
-# Load the environment variables from the specified file
-load_dotenv()
-
-# Configure logging
-logger.add("pipeline-gorq.log", rotation="1 MB", retention="10 days", level="DEBUG")
-logger.debug("Logging initialized")
-
-
-# Function to check if all required environment variables are loaded correctly
-def check_env_variable(var, var_name):
-    if var is None:
-        logger.error(f"Environment variable {var_name} is not set.")
-        raise ValueError(f"Environment variable {var_name} is not set.")
-    logger.debug(f"{var_name}: {var}")
-    return var
-
-
-# Check and log model configurations
 
 
 # Define the main pipeline class
