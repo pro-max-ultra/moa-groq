@@ -8,15 +8,14 @@ from pydantic import BaseModel  # Third-party library for data validation using 
 from groq import AsyncGroq  # Library for interacting with the Groq API
 
 
-
 # Define the main pipeline class
 class Pipeline:
     # Define the Valves class for API keys using Pydantic for data validation
     class Valves(BaseModel):
-        GROQ_API_KEY_1: str = ""
-        GROQ_API_KEY_2: str = ""
-        GROQ_API_KEY_3: str = ""
-        GROQ_API_KEY_4: str = ""
+        GROQ_API_KEY_1 = ""
+        GROQ_API_KEY_2 = ""
+        GROQ_API_KEY_3 = ""
+        GROQ_API_KEY_4 = ""
 
         # Define default values and model configuration using environment variables
         GROQ_DEFAULT_MAX_TOKENS = "4096"
@@ -25,9 +24,8 @@ class Pipeline:
         GROQ_LAYERS = "1"
         GROQ_AGENTS_PER_LAYER = "3"
         GROQ_MULTITURN = "True"
-
         # Load model configurations from environment variables
-        GROQ_MODEL_AGGREGATE = os.getenv("GROQ_MODEL_AGGREGATE")
+        GROQ_MODEL_AGGREGATE = "llama3-70b-8192"
         GROQ_MODEL_AGGREGATE_API_BASE = os.getenv("GROQ_MODEL_AGGREGATE_API_BASE")
         GROQ_MODEL_AGGREGATE_API_KEY = os.getenv("GROQ_MODEL_AGGREGATE_API_KEY")
 
@@ -42,26 +40,26 @@ class Pipeline:
         GROQ_MODEL_REFERENCE_3 = os.getenv("GROQ_MODEL_REFERENCE_3")
         GROQ_MODEL_REFERENCE_3_API_BASE = os.getenv("GROQ_MODEL_REFERENCE_3_API_BASE")
         GROQ_MODEL_REFERENCE_3_API_KEY = os.getenv("GROQ_MODEL_REFERENCE_3_API_KEY")
-
+        pass
 
     # Initialize the pipeline with model configurations and logging
     def __init__(self):
         self.name = "MOA Groq"
         self.valves = self.Valves(
-            GROQ_API_KEY_1=os.getenv("GROQ_API_KEY_1"),
-            GROQ_API_KEY_2=os.getenv("GROQ_API_KEY_2"),
-            GROQ_API_KEY_3=os.getenv("GROQ_API_KEY_3"),
-            GROQ_API_KEY_4=os.getenv("GROQ_API_KEY_4"),
+            GROQ_API_KEY_1=self.valves.GROQ_API_KEY_1,
+            GROQ_API_KEY_2=self.valves.GROQ_API_KEY_2,
+            GROQ_API_KEY_3=self.valves.GROQ_API_KEY_3,
+            GROQ_API_KEY_4=self.valves.GROQ_API_KEY_4,
         )
         self.model_aggregate = {
-            "name": GROQ_MODEL_AGGREGATE,
-            "api_base": GROQ_MODEL_AGGREGATE_API_BASE,
-            "api_key": GROQ_MODEL_AGGREGATE_API_KEY,
+            "name": self.valves.GROQ_MODEL_AGGREGATE,
+            "api_base": self.valves.GROQ_MODEL_AGGREGATE_API_BASE,
+            "api_key": self.valves.GROQ_MODEL_AGGREGATE_API_KEY,
         }
         self.reference_models = [
             {
-                "name": GROQ_MODEL_REFERENCE_1,
-                "api_base": GROQ_MODEL_REFERENCE_1_API_BASE,
+                "name": self.valves.GROQ_MODEL_REFERENCE_1,
+                "api_base": self.valves.GROQ_MODEL_REFERENCE_1_API_BASE,
                 "api_key": GROQ_MODEL_REFERENCE_1_API_KEY,
             },
             {
@@ -83,18 +81,15 @@ class Pipeline:
         pass
         # Asynchronous function to handle startup tasks
 
-
     async def on_startup(self):
         logger.info(f"on_startup: {self.name}")
         pass
         # Asynchronous function to handle shutdown tasks
 
-
     async def on_shutdown(self):
         logger.info(f"on_shutdown: {self.name}")
         pass
         # Asynchronous function to make API calls to the Groq API
-
 
     async def make_api_call(self, url, headers, data):
         try:
@@ -113,7 +108,6 @@ class Pipeline:
             return None
 
         # Asynchronous function to generate responses using a specific model
-
 
     async def generate_together(self, model_info, messages, max_tokens=GROQ_DEFAULT_MAX_TOKENS,
                                 temperature=GROQ_DEFAULT_TEMPERATURE):
@@ -158,7 +152,6 @@ class Pipeline:
 
         # Asynchronous function to call reference models in parallel
 
-
     async def call_reference_models_parallel(self, messages):
         responses = []
         tasks = []
@@ -175,12 +168,10 @@ class Pipeline:
 
         # Function to rotate the current reference model
 
-
     def rotate_agents(self):
         self.current_model_index = (self.current_model_index + 1) % len(self.reference_models)
 
         # Function to aggregate responses from reference models
-
 
     def aggregate_responses(self, responses: List[str]) -> str:
         aggregated_response = "\n".join(responses)
@@ -188,14 +179,12 @@ class Pipeline:
 
         # Asynchronous function to call the aggregate model with aggregated responses
 
-
     async def call_aggregator_model(self, aggregated_responses, messages):
         aggregated_message = [{"role": "user", "content": aggregated_responses}]
         final_response = await self.generate_together(self.model_aggregate, aggregated_message)
         return final_response
 
         # Function to inject references into messages
-
 
     def inject_references_to_messages(self, messages, references):
         messages = copy.deepcopy(messages)
@@ -214,7 +203,6 @@ class Pipeline:
 
         # Asynchronous function to generate responses with references
 
-
     async def generate_with_references(self, model_info, messages, references=[], max_tokens=GROQ_DEFAULT_MAX_TOKENS,
                                        temperature=GROQ_DEFAULT_TEMPERATURE):
         if len(references) > 0:
@@ -225,7 +213,6 @@ class Pipeline:
                                             max_tokens=max_tokens)
 
         # Asynchronous function to process a single item using a specific model
-
 
     async def process_fn(self, item, model_info, temperature=GROQ_DEFAULT_TEMPERATURE,
                          max_tokens=GROQ_DEFAULT_MAX_TOKENS):
@@ -242,7 +229,6 @@ class Pipeline:
         return {"output": response}
 
         # Asynchronous function to process a layer of models
-
 
     async def process_layer(self, data, temperature=GROQ_DEFAULT_TEMPERATURE, max_tokens=GROQ_DEFAULT_MAX_TOKENS):
         # logger.info(f"Processing layer with {len(self.reference_models)} agents")
@@ -262,7 +248,6 @@ class Pipeline:
         return responses
 
         # Asynchronous function to run the entire pipeline
-
 
     async def run_pipeline(self, user_message, temperature=GROQ_DEFAULT_TEMPERATURE, max_tokens=GROQ_DEFAULT_MAX_TOKENS,
                            rounds=GROQ_DEFAULT_ROUNDS, multi_turn=GROQ_MULTITURN):
@@ -347,7 +332,6 @@ class Pipeline:
         final_output = asyncio.run(self.run_pipeline(user_message))
 
         return final_output
-
 
 # Main function to initialize and run the pipeline
 # def main():
