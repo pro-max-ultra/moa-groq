@@ -16,31 +16,6 @@ load_dotenv()
 logger.add("pipeline-gorq.log", rotation="1 MB", retention="10 days", level="DEBUG")
 logger.debug("Logging initialized")
 
-# Define default values and model configuration using environment variables
-GROQ_DEFAULT_MAX_TOKENS = int(os.getenv("GROQ_DEFAULT_MAX_TOKENS", "4096"))
-GROQ_DEFAULT_TEMPERATURE = float(os.getenv("GROQ_DEFAULT_TEMPERATURE", "0.9"))
-GROQ_DEFAULT_ROUNDS = int(os.getenv("GROQ_DEFAULT_ROUNDS", "1"))
-GROQ_LAYERS = int(os.getenv("GROQ_LAYERS", "1"))
-GROQ_AGENTS_PER_LAYER = int(os.getenv("GROQ_AGENTS_PER_LAYER", "3"))
-GROQ_MULTITURN = os.getenv("GROQ_MULTITURN") == "True"
-
-# Load model configurations from environment variables
-GROQ_MODEL_AGGREGATE = os.getenv("GROQ_MODEL_AGGREGATE")
-GROQ_MODEL_AGGREGATE_API_BASE = os.getenv("GROQ_MODEL_AGGREGATE_API_BASE")
-GROQ_MODEL_AGGREGATE_API_KEY = os.getenv("GROQ_MODEL_AGGREGATE_API_KEY")
-
-GROQ_MODEL_REFERENCE_1 = os.getenv("GROQ_MODEL_REFERENCE_1")
-GROQ_MODEL_REFERENCE_1_API_BASE = os.getenv("GROQ_MODEL_REFERENCE_1_API_BASE")
-GROQ_MODEL_REFERENCE_1_API_KEY = os.getenv("GROQ_MODEL_REFERENCE_1_API_KEY")
-
-GROQ_MODEL_REFERENCE_2 = os.getenv("GROQ_MODEL_REFERENCE_2")
-GROQ_MODEL_REFERENCE_2_API_BASE = os.getenv("GROQ_MODEL_REFERENCE_2_API_BASE")
-GROQ_MODEL_REFERENCE_2_API_KEY = os.getenv("GROQ_MODEL_REFERENCE_2_API_KEY")
-
-GROQ_MODEL_REFERENCE_3 = os.getenv("GROQ_MODEL_REFERENCE_3")
-GROQ_MODEL_REFERENCE_3_API_BASE = os.getenv("GROQ_MODEL_REFERENCE_3_API_BASE")
-GROQ_MODEL_REFERENCE_3_API_KEY = os.getenv("GROQ_MODEL_REFERENCE_3_API_KEY")
-
 
 # Function to check if all required environment variables are loaded correctly
 def check_env_variable(var, var_name):
@@ -52,21 +27,6 @@ def check_env_variable(var, var_name):
 
 
 # Check and log model configurations
-GROQ_MODEL_AGGREGATE = check_env_variable(GROQ_MODEL_AGGREGATE, "GROQ_MODEL_AGGREGATE")
-GROQ_MODEL_AGGREGATE_API_BASE = check_env_variable(GROQ_MODEL_AGGREGATE_API_BASE, "GROQ_MODEL_AGGREGATE_API_BASE")
-GROQ_MODEL_AGGREGATE_API_KEY = check_env_variable(GROQ_MODEL_AGGREGATE_API_KEY, "GROQ_MODEL_AGGREGATE_API_KEY")
-
-GROQ_MODEL_REFERENCE_1 = check_env_variable(GROQ_MODEL_REFERENCE_1, "GROQ_MODEL_REFERENCE_1")
-GROQ_MODEL_REFERENCE_1_API_BASE = check_env_variable(GROQ_MODEL_REFERENCE_1_API_BASE, "GROQ_MODEL_REFERENCE_1_API_BASE")
-GROQ_MODEL_REFERENCE_1_API_KEY = check_env_variable(GROQ_MODEL_REFERENCE_1_API_KEY, "GROQ_MODEL_REFERENCE_1_API_KEY")
-
-GROQ_MODEL_REFERENCE_2 = check_env_variable(GROQ_MODEL_REFERENCE_2, "GROQ_MODEL_REFERENCE_2")
-GROQ_MODEL_REFERENCE_2_API_BASE = check_env_variable(GROQ_MODEL_REFERENCE_2_API_BASE, "GROQ_MODEL_REFERENCE_2_API_BASE")
-GROQ_MODEL_REFERENCE_2_API_KEY = check_env_variable(GROQ_MODEL_REFERENCE_2_API_KEY, "GROQ_MODEL_REFERENCE_2_API_KEY")
-
-GROQ_MODEL_REFERENCE_3 = check_env_variable(GROQ_MODEL_REFERENCE_3, "GROQ_MODEL_REFERENCE_3")
-GROQ_MODEL_REFERENCE_3_API_BASE = check_env_variable(GROQ_MODEL_REFERENCE_3_API_BASE, "GROQ_MODEL_REFERENCE_3_API_BASE")
-GROQ_MODEL_REFERENCE_3_API_KEY = check_env_variable(GROQ_MODEL_REFERENCE_3_API_KEY, "GROQ_MODEL_REFERENCE_3_API_KEY")
 
 
 # Define the main pipeline class
@@ -78,8 +38,31 @@ class Pipeline:
         GROQ_API_KEY_3: str = ""
         GROQ_API_KEY_4: str = ""
 
-        class Config:
-            arbitrary_types_allowed = True
+        # Define default values and model configuration using environment variables
+        GROQ_DEFAULT_MAX_TOKENS = "4096"
+        GROQ_DEFAULT_TEMPERATURE = "0.9"
+        GROQ_DEFAULT_ROUNDS = "1"
+        GROQ_LAYERS = "1"
+        GROQ_AGENTS_PER_LAYER = "3"
+        GROQ_MULTITURN = "True"
+
+        # Load model configurations from environment variables
+        GROQ_MODEL_AGGREGATE = os.getenv("GROQ_MODEL_AGGREGATE")
+        GROQ_MODEL_AGGREGATE_API_BASE = os.getenv("GROQ_MODEL_AGGREGATE_API_BASE")
+        GROQ_MODEL_AGGREGATE_API_KEY = os.getenv("GROQ_MODEL_AGGREGATE_API_KEY")
+
+        GROQ_MODEL_REFERENCE_1 = os.getenv("GROQ_MODEL_REFERENCE_1")
+        GROQ_MODEL_REFERENCE_1_API_BASE = os.getenv("GROQ_MODEL_REFERENCE_1_API_BASE")
+        GROQ_MODEL_REFERENCE_1_API_KEY = os.getenv("GROQ_MODEL_REFERENCE_1_API_KEY")
+
+        GROQ_MODEL_REFERENCE_2 = os.getenv("GROQ_MODEL_REFERENCE_2")
+        GROQ_MODEL_REFERENCE_2_API_BASE = os.getenv("GROQ_MODEL_REFERENCE_2_API_BASE")
+        GROQ_MODEL_REFERENCE_2_API_KEY = os.getenv("GROQ_MODEL_REFERENCE_2_API_KEY")
+
+        GROQ_MODEL_REFERENCE_3 = os.getenv("GROQ_MODEL_REFERENCE_3")
+        GROQ_MODEL_REFERENCE_3_API_BASE = os.getenv("GROQ_MODEL_REFERENCE_3_API_BASE")
+        GROQ_MODEL_REFERENCE_3_API_KEY = os.getenv("GROQ_MODEL_REFERENCE_3_API_KEY")
+
 
     # Initialize the pipeline with model configurations and logging
     def __init__(self):
@@ -118,15 +101,21 @@ class Pipeline:
 
         logger.debug(f"Pipeline initialized with models: {self.reference_models}")
 
-    # Asynchronous function to handle startup tasks
+        # Asynchronous function to handle startup tasks
+
+
     async def on_startup(self):
         logger.info(f"on_startup: {self.name}")
 
-    # Asynchronous function to handle shutdown tasks
+        # Asynchronous function to handle shutdown tasks
+
+
     async def on_shutdown(self):
         logger.info(f"on_shutdown: {self.name}")
 
-    # Asynchronous function to make API calls to the Groq API
+        # Asynchronous function to make API calls to the Groq API
+
+
     async def make_api_call(self, url, headers, data):
         try:
             logger.info(f">>>> Making API call to {url} with data: {data}")
@@ -143,7 +132,9 @@ class Pipeline:
             logger.error(f"Request failed: {e}")
             return None
 
-    # Asynchronous function to generate responses using a specific model
+        # Asynchronous function to generate responses using a specific model
+
+
     async def generate_together(self, model_info, messages, max_tokens=GROQ_DEFAULT_MAX_TOKENS,
                                 temperature=GROQ_DEFAULT_TEMPERATURE):
         logger.debug(
@@ -185,7 +176,9 @@ class Pipeline:
         logger.error(f"Failed to get a response from model {model_info['name']} after multiple attempts.")
         return None
 
-    # Asynchronous function to call reference models in parallel
+        # Asynchronous function to call reference models in parallel
+
+
     async def call_reference_models_parallel(self, messages):
         responses = []
         tasks = []
@@ -200,22 +193,30 @@ class Pipeline:
                 responses.append(result)
         return responses
 
-    # Function to rotate the current reference model
+        # Function to rotate the current reference model
+
+
     def rotate_agents(self):
         self.current_model_index = (self.current_model_index + 1) % len(self.reference_models)
 
-    # Function to aggregate responses from reference models
+        # Function to aggregate responses from reference models
+
+
     def aggregate_responses(self, responses: List[str]) -> str:
         aggregated_response = "\n".join(responses)
         return aggregated_response
 
-    # Asynchronous function to call the aggregate model with aggregated responses
+        # Asynchronous function to call the aggregate model with aggregated responses
+
+
     async def call_aggregator_model(self, aggregated_responses, messages):
         aggregated_message = [{"role": "user", "content": aggregated_responses}]
         final_response = await self.generate_together(self.model_aggregate, aggregated_message)
         return final_response
 
-    # Function to inject references into messages
+        # Function to inject references into messages
+
+
     def inject_references_to_messages(self, messages, references):
         messages = copy.deepcopy(messages)
 
@@ -231,7 +232,9 @@ class Pipeline:
 
         return messages
 
-    # Asynchronous function to generate responses with references
+        # Asynchronous function to generate responses with references
+
+
     async def generate_with_references(self, model_info, messages, references=[], max_tokens=GROQ_DEFAULT_MAX_TOKENS,
                                        temperature=GROQ_DEFAULT_TEMPERATURE):
         if len(references) > 0:
@@ -241,7 +244,9 @@ class Pipeline:
         return await self.generate_together(model_info, messages=messages, temperature=temperature,
                                             max_tokens=max_tokens)
 
-    # Asynchronous function to process a single item using a specific model
+        # Asynchronous function to process a single item using a specific model
+
+
     async def process_fn(self, item, model_info, temperature=GROQ_DEFAULT_TEMPERATURE,
                          max_tokens=GROQ_DEFAULT_MAX_TOKENS):
         messages = item["instruction"]
@@ -256,7 +261,9 @@ class Pipeline:
 
         return {"output": response}
 
-    # Asynchronous function to process a layer of models
+        # Asynchronous function to process a layer of models
+
+
     async def process_layer(self, data, temperature=GROQ_DEFAULT_TEMPERATURE, max_tokens=GROQ_DEFAULT_MAX_TOKENS):
         logger.info(f"Processing layer with {len(self.reference_models)} agents")
         responses = []
@@ -274,7 +281,9 @@ class Pipeline:
 
         return responses
 
-    # Asynchronous function to run the entire pipeline
+        # Asynchronous function to run the entire pipeline
+
+
     async def run_pipeline(self, user_message, temperature=GROQ_DEFAULT_TEMPERATURE, max_tokens=GROQ_DEFAULT_MAX_TOKENS,
                            rounds=GROQ_DEFAULT_ROUNDS, multi_turn=GROQ_MULTITURN):
         data = {
@@ -324,7 +333,9 @@ class Pipeline:
 
         return output
 
-    # Function to process user messages and run the pipeline
+        # Function to process user messages and run the pipeline
+
+
     def pipe(self, user_message: str, model_id: str = None, messages: List[dict] = None, body: dict = None) -> Union[
         str, Generator, Iterator]:
         logger.info(f"pipe called with user_message: {user_message}")
@@ -336,26 +347,7 @@ class Pipeline:
 
         return final_output
 
-    async def pipe(self, user_message: str, model_id: str = None, messages: List[dict] = None, body: dict = None) -> Union[str, Generator, Iterator]:
-        logger.info(f"pipe called with user_message: {user_message}")
-        logger.info(f"pipe called with model_id: {model_id}")
-        logger.info(f"pipe called with messages: {messages}")
-        logger.info(f"pipe called with body: {body}")
 
-        # Example adjustment: Use model_id to select a specific model configuration
-        if model_id:
-            selected_model_info = next((model for model in self.reference_models if model['name'] == model_id), None)
-            if not selected_model_info:
-                raise ValueError(f"Model with id {model_id} not found")
-        else:
-            selected_model_info = self.model_aggregate
-
-        # Incorporate messages and body into the pipeline logic as needed
-        # This is a placeholder for custom logic that might use messages and body
-
-        # Run the pipeline with the selected model and potentially modified messages/body
-        final_output = await self.run_pipeline(user_message, model_info=selected_model_info, messages=messages, body=body)
-        return final_output
 # Main function to initialize and run the pipeline
 # def main():
 #     pipeline = Pipeline()
