@@ -1,11 +1,11 @@
-import os  # Standard library for interacting with the operating system
-import copy  # Standard library for making shallow and deep copy operations
-import asyncio  # Standard library for asynchronous I/O
 from typing import List, Union, Generator, Iterator  # Typing module for type hints
 from dotenv import load_dotenv  # Module to load environment variables from a .env file
 from loguru import logger  # Third-party logging library
 from pydantic import BaseModel  # Third-party library for data validation using Python type annotations
 from groq import AsyncGroq  # Library for interacting with the Groq API
+import os  # Standard library for interacting with the operating system
+import copy  # Standard library for making shallow and deep copy operations
+import asyncio  # Standard library for asynchronous I/O
 
 
 # Define the main pipeline class
@@ -43,7 +43,7 @@ class Pipeline:
         pass
 
     # Initialize the pipeline with model configurations and logging
-    def __init__(self):
+    def __init__ (self):
         self.name = "MOA Groq"
         self.valves = self.Valves(
             GROQ_API_KEY_1=self.valves.GROQ_API_KEY_1,
