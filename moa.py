@@ -159,7 +159,7 @@ class Pipeline:
             "stream": True
         }
 
-        logger.debug(f"Request data: {data}")
+        # logger.debug(f"Request data: {data}")
 
         attempts = 3  # Number of retry attempts
         while attempts > 0:
